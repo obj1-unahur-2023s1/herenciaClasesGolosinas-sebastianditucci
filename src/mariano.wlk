@@ -1,12 +1,12 @@
 import golosinas.*
 
 object mariano {
-	var golosinas = []
+	const golosinas = []
 	 
-	method comprar(_golosina) { golosinas.add(_golosina) }
+	method comprar(_golosinas) { golosinas.addAll(_golosinas) }
 	
-	method desechar (_golosina) { golosinas.remove(_golosina) }
-	
+	method desechar (_golosinas) { golosinas.removeAll(_golosinas) }
+	method estaEnHeladera(golosina) { return golosinas.contains(golosina) }
 	method golosinas() { return golosinas }
 	method primerGolosina() { return golosinas.first() }
 	method ultimaGolosina() { return golosinas.last() }
@@ -63,6 +63,7 @@ object mariano {
 	method tieneGolosinaDeSabor(_sabor) {
 		return golosinas.any({_golosina => _golosina.sabor() == _sabor})
 	}
+	method baniar(golosina) { golosinas.add(new GolosinaBaniada(golosinaInterior = golosina)) } //asumo que si ya estaba bañada no le pasa nada y si ya estaba en la coleccion entonces se repite el elemento.
 }
 
 

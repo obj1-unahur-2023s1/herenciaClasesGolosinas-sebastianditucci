@@ -1,3 +1,4 @@
+import mariano.*
 /*
  * Los sabores
  */
@@ -34,7 +35,6 @@ class Alfajor {
 
 class Caramelo {
 	var peso = 5
-
 	method precio() { return 12 }
 	method peso() { return peso }
 	method mordisco() { peso = peso - 1 }
@@ -79,7 +79,7 @@ class Chocolatin {
 	// hay que acordarse de *dos* cosas, el peso inicial y el peso actual
 	// el precio se calcula a partir del precio inicial
 	// el mordisco afecta al peso actual
-	var pesoInicial
+	var property pesoInicial
 	var comido = 0
 	
 	method pesoInicial(unPeso) { pesoInicial = unPeso }
@@ -92,7 +92,7 @@ class Chocolatin {
 }
 
 class GolosinaBaniada {
-	var golosinaInterior
+	var property golosinaInterior
 	var pesoBanio = 4
 	
 	method golosinaInterior(unaGolosina) { golosinaInterior = unaGolosina }
@@ -108,8 +108,8 @@ class GolosinaBaniada {
 
 
 class Tuttifrutti {
-	var libreDeGluten
-	var sabores = [frutilla, chocolate, naranja]
+	var property libreDeGluten
+	const sabores = [frutilla, chocolate, naranja]
 	var saborActual = 0
 	
 	method mordisco() { saborActual += 1 }	
@@ -119,4 +119,49 @@ class Tuttifrutti {
 	method peso() { return 5 }
 	method libreGluten() { return libreDeGluten }	
 	method libreGluten(valor) { libreDeGluten = valor }
+}
+
+class BombonDuro inherits Bombon {
+	override method mordisco() { peso -= 1 }
+	method gradoDeDureza() {
+		if (peso > 3) { return 3 }
+		else if (peso >= 8 and peso <= 12) { return 2 }
+		else { return 1 }
+	}
+}
+
+class CarameloRelleno inherits Caramelo {
+	var sabor = frutilla
+	method cambiarSabor(saborNuevo) { sabor = saborNuevo }
+	override method mordisco() {
+		super()
+		self.cambiarSabor(chocolate)
+	}
+	override method precio() = super() + 1
+}
+
+class ObleaCrujiente inherits Oblea {
+	var cantidadDeMordiscos = 0
+	override method mordisco() {
+		if (cantidadDeMordiscos < 3) { 
+			super() 
+			peso -= 3
+	    }
+		else { super() }
+		cantidadDeMordiscos += 1
+	}
+	method estaDebil() = cantidadDeMordiscos > 3
+}
+
+class ChocolatinVip inherits Chocolatin {
+	var property coeficienteDeHumedad
+	method humedad() {
+		if (mariano.estaEnHeladera(self)) { return coeficienteDeHumedad.min(1) }
+		else { return 0 }
+	}
+	override method peso() = super() * (1 + self.humedad())
+}
+
+class ChocolatinPremium inherits ChocolatinVip {
+	override method humedad() = super() / 2
 }
